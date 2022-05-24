@@ -6,6 +6,7 @@ var express = require('express');
 var app = express();
 
 
+
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
@@ -26,13 +27,15 @@ app.get("/api/:date", function (req, res, next) {
   next()
 }, (req, res) => {
   const inputDate = req.params.date
-  const unix = Date.parse(inputDate)
-  const utc = new Date(inputDate).toUTCString()
+  let utc = new Date(inputDate).toUTCString()
+  utc = utc == 'Invalid Date' ? new Date(Number(inputDate)).toUTCString() : utc;
+  let unix = Date.parse(utc)
 
+  
   if(utc == 'Invalid Date') {
     res.json({error: 'Invalid Date'})
   } else {
-    res.json({"unix": unix, "utc": utc})
+    res.json({"unix2": unix, "utc2": utc, input: inputDate})
   }
 });
 
